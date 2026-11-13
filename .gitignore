@@ -1,0 +1,12 @@
+# 系统 / OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# 日志与临时文件 / logs & temp
+*.log
+*.tmp
+
+# 本地工具（便携版 Git / gh 等，不入库）/ local tools
+_tools/
+__pycache__/
