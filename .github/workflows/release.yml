@@ -1,0 +1,116 @@
+name: Release
+
+# 推送 v* 标签时自动建 Release 并挂上单文件 HTML；
+# 也可以在 Actions 页面手动填标签名触发。
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "要发布的标签名（例如 v1.2.3）"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      # GitHub 的 Release 附件名会丢掉非 ASCII 字符，
+      # 所以复制一份英文名用于附件，仓库里保留中文名原文件。
+      - name: Prepare assets
+        id: assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(断箭组卡器_BA_*.html)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::error::仓库根目录没找到 断箭组卡器_BA_*.html"
+            exit 1
+          fi
+          mkdir -p _assets
+          list=""
+          for f in "${files[@]}"; do
+            ver=$(basename "$f" | sed -E 's/.*_BA_(v[0-9.]+)\.html/\1/')
+            out="_assets/BA-Deck-Builder-${ver}.html"
+            cp "$f" "$out"
+            list="${list}${out}"$'\n'
+            echo "asset: $out ($(du -h "$out" | cut -f1))"
+          done
+          {
+            echo "list<<EOF"
+            printf '%s' "$list"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build notes
+        shell: bash
+        env:
+          TAG: ${{ steps.tag.outputs.name }}
+        run: |
+          set -euo pipefail
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            rev="$TAG"
+          else
+            rev="HEAD"
+          fi
+          prev=$(git describe --tags --abbrev=0 "${rev}^" 2>/dev/null || true)
+          {
+            echo "《断箭》离线单文件组卡器 —— 下载下方附件，双击用浏览器打开即可，不需要安装、不需要联网。"
+            echo ""
+            echo "An offline single-file deck builder for *Broken Arrow*. Grab the asset below and open it in any browser."
+            echo ""
+            echo "**在线用 / Live demo**：<https://kwhaku.github.io/BA-Deck-Builder/>"
+            echo ""
+            echo "### 变更 / Changes"
+            echo ""
+            if [ -n "$prev" ] && [ "$prev" != "$rev" ]; then
+              git log --no-merges --pretty='- %s' "${prev}..${rev}" || true
+            else
+              git log --no-merges --pretty='- %s' -n 20 "$rev" || true
+            fi
+            echo ""
+            echo "> 非官方工具，与 Steel Balalaika / Slitherine 无关；仅用于游戏组卡和学习交流。"
+            echo "> Unofficial, not affiliated with Steel Balalaika / Slitherine. For deck-building and study only."
+          } > notes.md
+          cat notes.md
+
+      - name: Publish release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tag.outputs.name }}
+          ASSETS: ${{ steps.assets.outputs.list }}
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(printf '%s' "$ASSETS" | sed '/^[[:space:]]*$/d')
+          echo "tag=${TAG}, assets=${#files[@]}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release 已存在，覆盖上传附件"
+            gh release upload "$TAG" "${files[@]}" --clobber
+          else
+            gh release create "$TAG" "${files[@]}" \
+              --title "${TAG} · 断箭组卡器 / Broken Arrow Deck Builder" \
+              --notes-file notes.md
+          fi
+          gh release view "$TAG" --json url,assets --jq '.url, (.assets[] | "\(.name)  \(.size) bytes")'
