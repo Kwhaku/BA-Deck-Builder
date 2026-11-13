@@ -55,9 +55,20 @@ On Android the tool opens the system share sheet — choose "Save to Files".
 
 ## 截图 / Screenshots
 
+**桌面 / Desktop**
+
 ![Arsenal](screenshots/arsenal.png)
 ![Editor](screenshots/editor.png)
 ![Deck list](screenshots/footer.png)
+
+**安卓 / Android** — 手机浏览器直接开在线版，不用装 App
+Opening the live version in a phone browser — no app to install
+
+<p>
+  <img src="screenshots/android-spec.jpg" width="240" alt="选国家与专精 / pick nation and specializations">
+  <img src="screenshots/android-deck.jpg" width="240" alt="卡组编辑 / deck editing">
+  <img src="screenshots/android-unit.jpg" width="240" alt="兵牌详情 / unit detail">
+</p>
 
 ## 数据来源 / Data sources
 
