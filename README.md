@@ -5,8 +5,8 @@
 An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it works — no server, no install. The UI has a **one-click 中文 / EN switch** (top-right).
 
 - 游戏版本 / Game: **v1.2.2**
-- 工具版本 / Tool: **v17.44**
-- 更新 / Updated: 2026-11-13
+- 工具版本 / Tool: **v17.44**（r2 修订 / r2 revision）
+- 更新 / Updated: 2026-11-14（目标图标修复 / target-icon fix）
 
 > 本工具由 bilibili:Paserly 使用 DSH 生成，仅供参考
 > 仅用于游戏组卡和学习交流
@@ -100,6 +100,7 @@ All values come from **local unpacking + runtime capture + in-game screenshots**
 
 | 工具 / Tool | 日期 / Date | 内容 / Notes |
 |---|---|---|
+| v17.44-r2 | 2026-11-14 | 目标图标修复：武器行统一 6 列网格，目标类型 tts 按解包表重新对齐。程序内页脚仍显示 v17.44 / weapon row forced to a 6-column grid; TargetType bitmap realigned (in-app footer still reads v17.44) |
 | v17.44 | 2026-11-13 | 军械库按游戏版式重做；中英一键切换；编辑页导出；改件与编制载具交互修复 |
 | v17.43 | 2026-11-13 | 单文件中英切换 / single-file language switch |
 | v17.42 | 2026-11-13 | 编辑页导出按钮、安卓导出文件名修复 |
