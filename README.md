@@ -5,8 +5,8 @@
 An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it works — no server, no install. The UI has a **one-click 中文 / EN switch** (top-right).
 
 - 游戏版本 / Game: **v1.2.2**
-- 工具版本 / Tool: **v17.46**（r3 修订 / r3 revision）
-- 更新 / Updated: 2026-11-16（军械库与武器顺序 / arsenal & weapon order）
+- 工具版本 / Tool: **v17.115**
+- 更新 / Updated: 2026-11-19
 
 > 本工具由 bilibili:Paserly 使用 DSH 生成，仅供参考
 > 仅用于游戏组卡和学习交流
@@ -24,7 +24,9 @@ An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it wo
 | 预算规则：单兵种超 10% 内橙色（有效）、超 10% 红色 ⚠ 无效、总分 >10000 无效 | Budget rules: up to 10% over a category cap is orange (valid); beyond that red ⚠ invalid; total over 10000 invalid |
 | 军械库按游戏版式：国家/专精筛选、搜索、六个兵种、图标卡 + 右侧详情 | Arsenal in the in-game layout: nation/spec filters, search, six categories, icon cards + detail panel |
 | 兵牌面板：装甲/生命/人员/视野/隐蔽/公路/越野/倒车/重量、特性、武器、改件 | Unit panel: armor, HP, crew, optics, stealth, road, off-road, reverse, weight, traits, weapons, customization |
-| 武器行：件数、弹药、射程、穿深（化学能橙 / 动能白）、每秒伤害、瞄准装填 | Weapon rows: count, ammo, range, penetration (chemical orange / kinetic white), DPS, aim & reload |
+| 武器行：件数、弹药、射程、穿深（化学能橙 / 动能白）、每秒伤害、目标图标；火炮与航空炸弹末列显示散布半径 | Weapon rows: count, ammo, range, penetration (chemical orange / kinetic white), DPS, target-type icons; artillery & bombs show dispersion radius |
+| 机炮每秒伤害按爆发模型算（每轮发数 + 点射停顿），不是单发÷间隔 | Autocannon DPS uses a burst model (burst length + salvo pause) |
+| 详情面板默认展开全部字段，含齐射时长 / 齐射轮数 | Detail panel opens everything by default, including salvo duration |
 | 编制载具：独立卡片、数量可调、默认展开 | Transports: separate card, adjustable count, expanded by default |
 | 隐藏数值：原始值、来源字段、换算过程 | Raw values: original value, source field, conversion |
 | 卡组管理：搜索、改名、复制、导出 .dek / JSON、删除、导入 | Deck management: search, rename, duplicate, export .dek / JSON, delete, import |
@@ -35,7 +37,7 @@ An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it wo
 **在线版 / Live demo**：<https://kwhaku.github.io/BA-Deck-Builder/> — 打开即用，不用下载
 Open in your browser, nothing to download.
 
-**下载 / Download**：[断箭组卡器_BA_v1.2.2.html](https://github.com/Kwhaku/BA-Deck-Builder/raw/main/断箭组卡器_BA_v1.2.2.html)（约 30 MB / ~30 MB）
+**下载 / Download**：[断箭组卡器_BA_v1.2.2.html](https://github.com/Kwhaku/BA-Deck-Builder/raw/main/断箭组卡器_BA_v1.2.2.html)（约 26 MB / ~26 MB）
 
 1. 下载 `断箭组卡器_BA_v1.2.2.html` / Download `断箭组卡器_BA_v1.2.2.html`
 2. 双击用浏览器打开（Chrome / Edge / 手机浏览器）/ Open it in any browser（也可直接访问上面的在线版）
@@ -78,14 +80,18 @@ All values come from **local unpacking + runtime capture + in-game screenshots**
 已核实 / Verified:
 
 - **1 数据单位 = 2 米 / 1 data unit = 2 meters**（视野、射程、散布、爆炸半径）
+- **火炮弹药 / 航空炸弹的末列是散布半径，取 H（水平）值**：LAV-M 80 m、KAB-1500 50 m、FAB-3000 130 m、HIMARS 260 m 逐台核对
+  Artillery & bomb dispersion is the horizontal (H) radius — verified unit by unit
+- **机炮每秒伤害 = 伤害 × 每轮发数 ÷ ((每轮发数−1) × 发射间隔 + 点射停顿)**，三个样本误差 < 0.2%（GSh-30-1 8.04 vs 游戏 8.05）
 - 造价 = 单位底价 + 各改件组默认项 / Cost = base cost + default option price of each group
 - 弹药 = `Quantity × HUDMultiplier × 件数` / Ammo = `Quantity × HUDMultiplier × count`
-- 每秒伤害 = 单发伤害 ÷ 爆发间隔 / DPS = damage per shot ÷ burst interval
 - 化学能（`ArmorTargeted=2`）穿深为橙色单值，动能为白色区间 / Chemical shows a single orange penetration value, kinetic shows a white range
 
 ## 已知限制 / Known limitations
 
 - **转弯半径 / Turn radius**：23 个飞行预设只有 3 个有实测值，其余留空（数据源无该字段，也没有可推导的公式）
+- **冷却 / 返还延迟**：Destroyed 档的原始表在离线解包、bundle、运行时单位模型里都找不到，所以统计行不显示冷却（v17.115 已撤掉该格）
+  The refund-delay base table isn't in any data source we can read, so no cooldown column is shown
 - 少量未在游戏里逐个截图核对过的单位，件数/弹药按规则推导 / A handful of units were never checked against in-game screenshots
 - 游戏显示的 Rate of fire 与工具口径不同，工具显示的是每秒伤害 / The in-game rate of fire uses a different definition, so the tool shows DPS
 
@@ -100,6 +106,9 @@ All values come from **local unpacking + runtime capture + in-game screenshots**
 
 | 工具 / Tool | 日期 / Date | 内容 / Notes |
 |---|---|---|
+| v17.115 | 2026-11-19 | 本轮 14 个构建汇总：火炮弹药行显示散布半径、机炮 DPS 改爆发模型、详情面板默认展开、修复面板/页签点不动、修复最右目标图标被裁、74 台非军械库单位标注、撤掉数据不足的冷却格；改件图标改为共享表引用，体积 30 MB → 26 MB。14 builds in one day, see the handoff notes |
+| v17.99 | 2026-11-19 | 自动武器每秒伤害改用爆发模型（新增 `tbs/sh/tbm` 字段，覆盖 1070 件武器）/ burst-model DPS with new fields |
+| v17.98 | 2026-11-19 | 火炮弹药行末列改显示散布半径（`dsp × 2` 米），航空炸弹同规则；Sprut-SD 卡名修复 / dispersion radius column |
 | v17.44-r2 | 2026-11-14 | 目标图标修复：武器行统一 6 列网格，目标类型 tts 按解包表重新对齐。程序内页脚仍显示 v17.44 / weapon row forced to a 6-column grid; TargetType bitmap realigned (in-app footer still reads v17.44) |
 | v17.44 | 2026-11-13 | 军械库按游戏版式重做；中英一键切换；编辑页导出；改件与编制载具交互修复 |
 | v17.43 | 2026-11-13 | 单文件中英切换 / single-file language switch |
