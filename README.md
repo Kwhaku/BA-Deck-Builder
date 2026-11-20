@@ -5,8 +5,8 @@
 An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it works — no server, no install. The UI has a **one-click 中文 / EN switch** (top-right).
 
 - 游戏版本 / Game: **v1.2.2**
-- 工具版本 / Tool: **v17.115**
-- 更新 / Updated: 2026-11-19
+- 工具版本 / Tool: **v17.118**
+- 更新 / Updated: 2026-11-20
 
 > 本工具由 bilibili:Paserly 使用 DSH 生成，仅供参考
 > 仅用于游戏组卡和学习交流
@@ -106,6 +106,7 @@ All values come from **local unpacking + runtime capture + in-game screenshots**
 
 | 工具 / Tool | 日期 / Date | 内容 / Notes |
 |---|---|---|
+| v17.118 | 2026-11-20 | 隐藏面板新增四项：**阵亡冷却**（`420 + 1.5×总造价 + 时间修正`，地面单位实测 6/6）、**班组死亡顺序**（`DeathPriority` 降序、同档随机，实测 2/2）、车体尺寸 / 队形占地、主炮塔转速；每项都标注数据出处与「推论」状态 |
 | v17.115 | 2026-11-19 | 本轮 14 个构建汇总：火炮弹药行显示散布半径、机炮 DPS 改爆发模型、详情面板默认展开、修复面板/页签点不动、修复最右目标图标被裁、74 台非军械库单位标注、撤掉数据不足的冷却格；改件图标改为共享表引用，体积 30 MB → 26 MB。14 builds in one day, see the handoff notes |
 | v17.99 | 2026-11-19 | 自动武器每秒伤害改用爆发模型（新增 `tbs/sh/tbm` 字段，覆盖 1070 件武器）/ burst-model DPS with new fields |
 | v17.98 | 2026-11-19 | 火炮弹药行末列改显示散布半径（`dsp × 2` 米），航空炸弹同规则；Sprut-SD 卡名修复 / dispersion radius column |
