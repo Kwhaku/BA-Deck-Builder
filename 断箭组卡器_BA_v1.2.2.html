@@ -1074,6 +1074,30 @@ function unitById(id){ for(var i=0;i<DATA.units.length;i++) if(DATA.units[i].id=
 function defIdx(g){ return (g && g.di != null) ? g.di : 0; }
 /* 单位在“未做任何改动”状态下游戏显示的造价 = 基础价 + 各改件默认项价之和 */
 function costOfUnit(u){ if(!u) return 0; return (u.costDef != null) ? u.costDef : (u.cost || 0); }
+
+// 阵亡冷却（卡面时钟）：420 + 1.5×当前总造价 + 时间修正；飞机/直升机返回 null
+function deathDelayOf(uid){
+  var u = unitById(uid); if (!u) return null;
+  if (u.cat === 'hel' || u.cat === 'air') return null;
+  var di = unitInDeck(uid);
+  var ent = di >= 0 ? state.deck.entries[di] : null;
+  var total = ent ? unitCostOf(ent) : costOfUnit(u);
+  var tr = u.cd2 || 0;
+  if (ent) {
+    (u.mods || []).forEach(function(g, gi){
+      var oi = (ent.mods && ent.mods[gi] != null) ? ent.mods[gi] : defIdx(g);
+      var o = (g.opts || [])[oi];
+      if (o && o.tres) tr += o.tres;
+    });
+  }
+  var d = 420 + 1.5 * total + tr;
+  return d < 0 ? 0 : d;
+}
+function mmssSec(d){
+  var m = Math.floor(d / 60), s = Math.round(d % 60);
+  if (s === 60) { m++; s = 0; }
+  return m + ':' + ('0' + s).slice(-2);
+}
 function specById(id){ for(var i=0;i<DATA.specs.length;i++) if(DATA.specs[i].id===id) return DATA.specs[i]; return null; }
 function cleanMod(n){
   var s = String(n==null?"":n).replace(/^(Option\s+Armor|Option\s+|UnitVariant|MainTurret|CupolaTurret|Turret|Armory|Armor|Weapons)\s+/i,"").trim();
@@ -2133,6 +2157,8 @@ function statRow(u, st){
   var cap = effCap(u);
 
 
+  var _dd = deathDelayOf(u.id);
+  if (_dd != null) cells.push(['', mmssSec(_dd), mmssSec(_dd), 'DeathTimer']);
   rows = '<div class="statrow'+(cells.length>=8?' dense':'')+'">'+cells.map(function(c){
     var up = (c[1]!==c[2]) ? ' up' : '';
     // 图标优先查 partIcons，其次查 statIcons（weight / spd / stealth / optics / armor / hp）
@@ -2688,31 +2714,26 @@ function hiddenPanel(uid){
   // 解包里没有基础时长，只有这两个修正值，所以只放在隐藏栏，不对外显示
   // 卡片时钟：解包 23 张表里没有这个字段，是从 1112 的 UI 抓包还原的（同一单位反复出现值恒定）
   if (u.clk) add('卡片时钟', u.clk, 'ui_capture 旧抓包（当时装配下的快照，可能与当前改件不符；以下方「阵亡冷却」为准）');
-  // 阵亡冷却（卡面时钟）——按造价反推，目前是【推论】，只放在隐藏栏
+  // 阵亡冷却：时间在属性行显示（与游戏一致），这里只放公式与推论
   (function(){
-    var cat = u.cat || '';
-    var isAir = (cat === 'hel' || cat === 'air');
+    var uu = unitById(uid) || u;
+    if (uu.cat === 'hel' || uu.cat === 'air') {
+      add('阵亡冷却公式', '—', '%%WRAP%%推论：飞机/直升机走单独分支（含弹药补给项），尚未解出');
+      return;
+    }
     var di = unitInDeck(uid);
     var ent = di >= 0 ? state.deck.entries[di] : null;
-    var total = ent ? unitCostOf(ent) : costOfUnit(u);
-    var tr = u.cd2 || 0;
+    var total = ent ? unitCostOf(ent) : costOfUnit(uu);
+    var tr = uu.cd2 || 0;
     if (ent) {
-      (u.mods || []).forEach(function(g, gi){
+      (uu.mods || []).forEach(function(g, gi){
         var oi = (ent.mods && ent.mods[gi] != null) ? ent.mods[gi] : defIdx(g);
         var o = (g.opts || [])[oi];
         if (o && o.tres) tr += o.tres;
       });
     }
-    if (isAir) {
-      add('%%ICON%%阵亡后', '—', '推论：飞机/直升机走单独分支（含弹药补给项），尚未解出');
-    } else {
-      var d = 420 + 1.5 * total + tr;
-      if (d < 0) d = 0;
-      var mm = Math.floor(d / 60), ss = Math.round(d % 60);
-      if (ss === 60) { mm++; ss = 0; }
-      add('%%ICON%%阵亡后', mm + ':' + ('0' + ss).slice(-2),
-          '推论：420 + 1.5×总价(' + Math.round(total) + ') + 修正(' + tr + ') = ' + Math.round(d) + 's ｜ 地面 6/6 实测；飞机/直升机不适用');
-    }
+    var d = Math.max(0, 420 + 1.5 * total + tr);
+    add('阵亡冷却公式', Math.round(d) + ' s', '%%WRAP%%推论：420 + 1.5×总价(' + Math.round(total) + ') + 修正(' + tr + ')；地面单位实测 6/6 吻合，飞机/直升机不适用');
   })();
   if (u.cd2) add('阵亡时间修正', u.cd2 + ' s', 'Units.TimeModifierResurrect');
   if (u.cd1) add('返还时间修正', u.cd1 + ' s', 'Units.TimeModifierRefund');
@@ -3618,7 +3639,7 @@ function ovSortBy(){}
 <footer class="siteFoot">
   <div>本工具由bilibili:Paserly使用DSH生成，仅供参考</div>
   <div>仅用于游戏组卡和学习交流</div>
-  <div class="meta">游戏版本 v1.2.2 · 工具 v17.118 · 2026-11-20</div>
+  <div class="meta">游戏版本 v1.2.2 · 工具 v17.119 · 2026-11-20</div>
 </footer>
 
 </body>
