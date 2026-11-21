@@ -2707,7 +2707,7 @@ function hiddenPanel(uid){
   if (u.sq && u.sq.length) {
     var ord = u.sq.map(function(m){ return m[0]; }).join(' \u2192 ');
     var det = u.sq.map(function(m){ return m[0] + '\u00b7' + (m[1] || m[2] || '?'); }).join('  ');
-    add('班组死亡顺序', ord, '\u6570\u5b57\u8d8a\u5927\u8d8a\u5148\u6b7b\uff0c\u540c\u6863\u968f\u673a\uff08\u5b9e\u6d4b 2/2\uff09\uff5c' + det);
+    add('班组死亡顺序', ord, '\u6570\u5b57\u8d8a\u5927\u8d8a\u5148\u6b7b\uff0c\u540c\u6863\u968f\u673a\uff084 \u4e2a\u73ed\u7ec4 8 \u6b21\u9635\u4ea1\uff09\uff5c' + det);
   }
   if (u.ts && u.ts.length) add('炮塔转速', u.ts.map(function(v){return v >= 999 ? '瞬转' : v + '°/s';}).join(' / '), 'Turrets.HorizontalRotationSpeed（主炮塔' + (u.ts.length > 1 ? '，本机有 ' + u.ts.length + ' 种' : '') + '）');
   // 冷却修正：游戏界面上那个时钟是运行时倒计时（同一单位会给出 0:31 / 0:31 / 2:52 等不同值），
@@ -3639,7 +3639,7 @@ function ovSortBy(){}
 <footer class="siteFoot">
   <div>本工具由bilibili:Paserly使用DSH生成，仅供参考</div>
   <div>仅用于游戏组卡和学习交流</div>
-  <div class="meta">游戏版本 v1.2.2 · 工具 v17.119 · 2026-11-20</div>
+  <div class="meta">游戏版本 v1.2.2 · 工具 v17.120 · 2026-11-20</div>
 </footer>
 
 </body>
