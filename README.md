@@ -5,8 +5,8 @@
 An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it works — no server, no install. The UI has a **one-click 中文 / EN switch** (top-right).
 
 - 游戏版本 / Game: **v1.2.2**
-- 工具版本 / Tool: **v17.120**
-- 更新 / Updated: 2026-11-20
+- 工具版本 / Tool: **v17.132**
+- 更新 / Updated: 2026-11-22
 
 > 本工具由 bilibili:Paserly 使用 DSH 生成，仅供参考
 > 仅用于游戏组卡和学习交流
@@ -20,6 +20,7 @@ An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it wo
 
 | 中文 | English |
 |---|---|
+| **机制速查**（顶栏「机制」按钮）：命中/散布/穿甲/掩体/压制/重创的公式与证据等级，未验证项单列一页 | **Mechanics lookup** (top-bar「机制」): formulas + evidence level for hit / dispersion / penetration / cover / suppression / crit; unverified items on a separate tab |
 | 选国家 + 2 个专精，六大类槽位，实时点数 | Pick a country + 2 specializations, six slot categories, live points |
 | 预算规则：单兵种超 10% 内橙色（有效）、超 10% 红色 ⚠ 无效、总分 >10000 无效 | Budget rules: up to 10% over a category cap is orange (valid); beyond that red ⚠ invalid; total over 10000 invalid |
 | 军械库按游戏版式：国家/专精筛选、搜索、六个兵种、图标卡 + 右侧详情 | Arsenal in the in-game layout: nation/spec filters, search, six categories, icon cards + detail panel |
@@ -37,7 +38,7 @@ An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it wo
 **在线版 / Live demo**：<https://kwhaku.github.io/BA-Deck-Builder/> — 打开即用，不用下载
 Open in your browser, nothing to download.
 
-**下载 / Download**：[断箭组卡器_BA_v1.2.2.html](https://github.com/Kwhaku/BA-Deck-Builder/raw/main/断箭组卡器_BA_v1.2.2.html)（约 26 MB / ~26 MB）
+**下载 / Download**：[断箭组卡器_BA_v1.2.2.html](https://github.com/Kwhaku/BA-Deck-Builder/raw/main/断箭组卡器_BA_v1.2.2.html)（约 24 MB / ~24 MB）
 
 1. 下载 `断箭组卡器_BA_v1.2.2.html` / Download `断箭组卡器_BA_v1.2.2.html`
 2. 双击用浏览器打开（Chrome / Edge / 手机浏览器）/ Open it in any browser（也可直接访问上面的在线版）
@@ -106,6 +107,10 @@ All values come from **local unpacking + runtime capture + in-game screenshots**
 
 | 工具 / Tool | 日期 / Date | 内容 / Notes |
 |---|---|---|
+| v17.132 | 2026-11-22 | 机制速查面板（顶栏「机制」），条目顺序：穿甲 → 重创 → 压制 → 掩体 → 命中 → 散布 → 数据 |
+| v17.131 | 2026-11-22 | 间瞄散布模型修正：`r = K(√t) × DispersionH × 射程/参考射程`（原 0.744 系数是误读，正确径向中位 0.464） |
+| v17.129~130 | 2026-11-22 | 武器图标改按 `HUDIcon` 绑定并去重（26.3→24 MB）；10 个武器小组卡面换成游戏实拍图；弹药行去掉重复的「掩体」角标 |
+| v17.125~128 | 2026-11-22 | 弹药详细面板恢复与游戏一致；解包数据移入「隐」面板；修正 T-15 / Verba / Kornet 等图标与卡面 |
 | v17.120 | 2026-11-21 | 班组死亡顺序的实测样本补到 **4 个班组 / 8 次阵亡**（Milan ×2 的 4→3→2、边防兵 ×2 的首死均为最高档） |
 | v17.119 | 2026-11-20 | 阵亡冷却改为**属性行直接显示**（时钟+骷髅图标 + 时间，与游戏面板一致）；公式、出处与「推论」标注移入隐藏面板 |
 | v17.118 | 2026-11-20 | 隐藏面板新增四项：**阵亡冷却**（`420 + 1.5×总造价 + 时间修正`，地面单位实测 6/6）、**班组死亡顺序**（`DeathPriority` 降序、同档随机，实测 2/2）、车体尺寸 / 队形占地、主炮塔转速；每项都标注数据出处与「推论」状态 |
