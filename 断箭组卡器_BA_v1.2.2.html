@@ -3690,7 +3690,8 @@ var KB_OK = [{h:'穿甲与伤害', f:'动能：pen ≥ armor → 满伤；否则
   r:[['无制导','散布框 ∩ 目标包围盒的**面积占比**，不是高斯模型','代码级'],
      ['制导','DispersionH × 目标ECM × CM × 压制系数','代码级'],
      ['热诱弹','CM = ((1 − DispersionV) × 诱饵效果) ^ 诱饵数','代码级'],
-     ['制导武器精度','就是 DispersionHorizontalRadius；DispersionV 被复用为抗诱饵性','代码级']]},
+     ['制导武器精度','就是 DispersionHorizontalRadius；DispersionV 被复用为抗诱饵性','代码级'],
+     ['老兵 / 重创','**不进命中率**：8 参数重载全库 0 调用点，属未使用代码','代码级']]},
  {h:'间瞄散布', f:'R_max = DispersionH × (射程 / 参考射程)\nr     = K(√t) × R_max        t ~ U(0,1), K = CDF 的反函数\n径向参数：中位 0.464 / RMS 0.524    显示散布 = 2 × DispersionH（全宽）',
   r:[['采样方式','启动时烘焙：10001 点把 CDF 反成 K，再用 1000 点算 K(√(i/1000))','代码级'],
      ['@4300m','预测中位 48.7 / 实测 53.2；预测 RMS 55.0 / 实测 54.9','实测'],
@@ -3711,8 +3712,7 @@ var KB_TODO = [
      ['forceTopArmorAttack','AI / UI 侧是否还有别处设置，未逐条确认','未定'],
      ['穿深跨度参数','span = 2×(GroundRange−MinRange) 来自实测拟合，调用处参数未逐条确认','待确认']]},
  {h:'机制空缺',
-  r:[['老兵 Veterancy','只在 CalculateMissileHitChance 8 参数版签名见过，没有调用点','缺失'],
-     ['组件损伤顺序','同一发里组件伤害与主伤害谁先结算，未追','缺失'],
+  r:[     ['组件损伤顺序','同一发里组件伤害与主伤害谁先结算，未追','缺失'],
      ['SneakCoverBonus / CoverSnapDistance','属隐蔽/移动系统，只有字段，没验证过效果','缺失'],
      ['转弯半径','只有 3 台飞行预设的实测值，无公式','缺失'],
      ['直升机补给项','弹药补给系数未完全拆出','缺失']]},
@@ -3792,7 +3792,7 @@ function ovSortBy(){}
 <footer class="siteFoot">
   <div>本工具由bilibili:Paserly使用DSH生成，仅供参考</div>
   <div>仅用于游戏组卡和学习交流</div>
-  <div class="meta">游戏版本 v1.2.2 · 工具 v17.132 · 2026-11-22</div>
+  <div class="meta">游戏版本 v1.2.2 · 工具 v17.134 · 2026-11-22</div>
 </footer>
 
 

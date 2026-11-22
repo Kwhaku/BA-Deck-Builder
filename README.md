@@ -5,7 +5,7 @@
 An offline, single-file deck builder for *Broken Arrow*. Open the HTML and it works — no server, no install. The UI has a **one-click 中文 / EN switch** (top-right).
 
 - 游戏版本 / Game: **v1.2.2**
-- 工具版本 / Tool: **v17.132**
+- 工具版本 / Tool: **v17.134**
 - 更新 / Updated: 2026-11-22
 
 > 本工具由 bilibili:Paserly 使用 DSH 生成，仅供参考
@@ -107,6 +107,7 @@ All values come from **local unpacking + runtime capture + in-game screenshots**
 
 | 工具 / Tool | 日期 / Date | 内容 / Notes |
 |---|---|---|
+| v17.134 | 2026-11-22 | 查明「老兵/重创不进命中率」：8 参数重载全库 0 调用点，属未使用代码；机制速查同步 |
 | v17.132 | 2026-11-22 | 机制速查面板（顶栏「机制」），条目顺序：穿甲 → 重创 → 压制 → 掩体 → 命中 → 散布 → 数据 |
 | v17.131 | 2026-11-22 | 间瞄散布模型修正：`r = K(√t) × DispersionH × 射程/参考射程`（原 0.744 系数是误读，正确径向中位 0.464） |
 | v17.129~130 | 2026-11-22 | 武器图标改按 `HUDIcon` 绑定并去重（26.3→24 MB）；10 个武器小组卡面换成游戏实拍图；弹药行去掉重复的「掩体」角标 |
